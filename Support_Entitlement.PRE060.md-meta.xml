@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>PRE060</label>
+    <protected>false</protected>
+    <values>
+        <field>Active_Services__c</field>
+        <value xsi:type="xsd:string">Premium</value>
+    </values>
+    <values>
+        <field>End_Day__c</field>
+        <value xsi:type="xsd:string">Fri</value>
+    </values>
+    <values>
+        <field>End_Time__c</field>
+        <value xsi:type="xsd:string">07:00 AM</value>
+    </values>
+    <values>
+        <field>Entitlement_Process__c</field>
+        <value xsi:type="xsd:string">Premium Enablement Service Package</value>
+    </values>
+    <values>
+        <field>Holiday__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Issue_Type__c</field>
+        <value xsi:type="xsd:string">Non-Technical</value>
+    </values>
+    <values>
+        <field>Premium_Support__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Route_To__c</field>
+        <value xsi:type="xsd:string">T2 US Queue</value>
+    </values>
+    <values>
+        <field>Start_Day__c</field>
+        <value xsi:type="xsd:string">Mon</value>
+    </values>
+    <values>
+        <field>Start_Time__c</field>
+        <value xsi:type="xsd:string">12:00 AM</value>
+    </values>
+    <values>
+        <field>US_Support_Required__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Weekday__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>X24x7_Handoff__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+</CustomMetadata>
