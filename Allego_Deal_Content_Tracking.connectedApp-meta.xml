@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConnectedApp xmlns="http://soap.sforce.com/2006/04/metadata">
+    <contactEmail>jodonnell@quickbase.com</contactEmail>
+    <label>Allego Deal Content Tracking</label>
+    <oauthConfig>
+        <callbackUrl>https://my.allego.com/crmAuthorization.do</callbackUrl>
+        <certificate>MIIDhTCCAm2gAwIBAgIUEg6xlFmsvq1SzjU5SVf2FWVjCoQwDQYJKoZIhvcNAQELBQAwUjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAk1BMRAwDgYDVQQHDAdOZWVkaGFtMQ8wDQYDVQQKDAZBbGxlZ28xEzARBgNVBAMMCmFsbGVnby5jb20wHhcNMjQwNjI1MTQzMTUwWhcNNDMwODI1MTQzMTUwWjBSMQswCQYDVQQGEwJVUzELMAkGA1UECAwCTUExEDAOBgNVBAcMB05lZWRoYW0xDzANBgNVBAoMBkFsbGVnbzETMBEGA1UEAwwKYWxsZWdvLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMRCCFfiClxPwxiN8Sk6/hipAegYBaZDr6bb893GWjT+W2hx0wUePF5Q7z4kCHvoQgigK7A2R4vYf7GAtPr2fHigXOZWolHFrN7UI3+oUKCX554VM9TDEboI6zUVEVtckbWsewbT2A4c4/Ki9+DlroKk354iX6//aGSsix3cvb/ZNOHVrALmOSRO60zitCc22Et4/bKPqmflReFUzOwRfqMNft2Rb62f7CdD1bQIWvPY3HBWNomM0sPC0urkv0oIUdbpAm9SNvPGMUAG7vjXpXTHdD7ZWyGAlfKmtynYYb5MvZeJyQsIHCIo6MtzkGqkSJFQM+KrOgGpno+DWylWUxsCAwEAAaNTMFEwHQYDVR0OBBYEFHy0qDRndH5gDOvtlunwN9jsVBezMB8GA1UdIwQYMBaAFHy0qDRndH5gDOvtlunwN9jsVBezMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAE0JjxT+0LAwCiqrAp3f3ErO90QQ8GIfHUgSQ6quzD8KcZ4anhrpBX9jXDHk6WiUiiv+3IiPWhyh6C0aaanJHoqkoJO8fBQA5JVLop0LTjhURmGSaFbE0cENxq2UOTDdzoac/Z4vtIfnlhkTYpg4UYESHOf5yy7OnxBZ7lQ77yOjCGxd0En2EeNNjeBBn75KFWdqpoHkwefPwqXGytCDbmpm/jaq49J1PO1TqbAPeUAvlrgs0KvwH15IgbqyQMGPUPNQyNzFaFV1beWALR9kk6YKB+7R/bOef8K2dHH8+ZxArTwaMppfILihpD7R/uFPiEAXM8fHtlKa9ktN2GlDaWc=</certificate>
+        <consumerKey>3MVG98bly0AKZIIXbXfaAkxa19AR0LS0dKNNdf681d6NF0_1yaVqTicamjKJTGL4HsHQ49lpULQXRzcKKuTFI</consumerKey>
+        <isAdminApproved>true</isAdminApproved>
+        <isClientCredentialEnabled>false</isClientCredentialEnabled>
+        <isCodeCredentialEnabled>false</isCodeCredentialEnabled>
+        <isCodeCredentialPostOnly>false</isCodeCredentialPostOnly>
+        <isConsumerSecretOptional>false</isConsumerSecretOptional>
+        <isIntrospectAllTokens>false</isIntrospectAllTokens>
+        <isNamedUserJwtEnabled>false</isNamedUserJwtEnabled>
+        <isPkceRequired>false</isPkceRequired>
+        <isRefreshTokenRotationEnabled>false</isRefreshTokenRotationEnabled>
+        <isSecretRequiredForRefreshToken>false</isSecretRequiredForRefreshToken>
+        <isSecretRequiredForTokenExchange>false</isSecretRequiredForTokenExchange>
+        <isTokenExchangeEnabled>false</isTokenExchangeEnabled>
+        <scopes>Api</scopes>
+        <scopes>RefreshToken</scopes>
+        <scopes>OpenID</scopes>
+    </oauthConfig>
+    <oauthPolicy>
+        <ipRelaxation>BYPASS</ipRelaxation>
+        <isTokenExchangeFlowEnabled>false</isTokenExchangeFlowEnabled>
+        <refreshTokenPolicy>infinite</refreshTokenPolicy>
+    </oauthPolicy>
+    <permissionSetName>System Admin permission set</permissionSetName>
+    <profileName>QB - Customer PS/Success</profileName>
+    <profileName>QB - Finance</profileName>
+    <profileName>QB - Legal</profileName>
+    <profileName>QB - Marketing</profileName>
+    <profileName>QB - SDR</profileName>
+    <profileName>QB - Sales Operations</profileName>
+    <profileName>QB - Super User</profileName>
+    <profileName>QB - Read Only</profileName>
+    <profileName>QB - Sales Rep</profileName>
+    <profileName>QB - Solution Consultant</profileName>
+    <profileName>System Administrator</profileName>
+    <profileName>TEST DUMMY</profileName>
+    <profileName>QB - Technical Support</profileName>
+    <profileName>QB - Product Management</profileName>
+    <profileName>QB - SRE</profileName>
+    <profileName>QB - Customer Support</profileName>
+    <profileName>QB - Product Marketing</profileName>
+    <profileName>QB - Professional Services</profileName>
+    <profileName>QB - Product Development</profileName>
+    <profileName>QB - Technical Support Manager</profileName>
+    <profileName>Salesforce Integration Admin - IP Testing</profileName>
+</ConnectedApp>

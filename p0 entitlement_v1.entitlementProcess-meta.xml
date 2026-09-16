@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EntitlementProcess xmlns="http://soap.sforce.com/2006/04/metadata">
+    <SObjectType>Case</SObjectType>
+    <active>true</active>
+    <entryStartDateField>Case.CreatedDate</entryStartDateField>
+    <exitCriteriaFilterItems>
+        <field>Case.IsClosed</field>
+        <operation>equals</operation>
+        <value>true</value>
+    </exitCriteriaFilterItems>
+    <isVersionDefault>false</isVersionDefault>
+    <milestones>
+        <businessHours>Default</businessHours>
+        <isDisplayedOnLinkedEntity>false</isDisplayedOnLinkedEntity>
+        <milestoneCriteriaFormula>AND(
+ISPICKVAL(Priority, &apos;P0 - Critical Customer Issue - No workaround&apos;)
+)</milestoneCriteriaFormula>
+        <milestoneName>P0 Milestone (2hr)</milestoneName>
+        <minutesToComplete>120</minutesToComplete>
+        <timeTriggers>
+            <actions>
+                <name>Email_Alert_SLA_Breach</name>
+                <type>Alert</type>
+            </actions>
+            <actions>
+                <name>pausetimer</name>
+                <type>FieldUpdate</type>
+            </actions>
+            <timeLength>1</timeLength>
+            <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>
+        </timeTriggers>
+        <timeTriggers>
+            <actions>
+                <name>Email_Alert_15_minutes_from_breaching_our_first_response_SLA_P0</name>
+                <type>Alert</type>
+            </actions>
+            <timeLength>-15</timeLength>
+            <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>
+        </timeTriggers>
+        <useCriteriaStartTime>true</useCriteriaStartTime>
+    </milestones>
+    <name>P0 Entitlement</name>
+    <versionMaster>552UN00000Udc5l</versionMaster>
+    <versionNumber>1</versionNumber>
+</EntitlementProcess>

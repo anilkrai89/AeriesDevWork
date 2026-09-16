@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConnectedApp xmlns="http://soap.sforce.com/2006/04/metadata">
+    <canvasConfig>
+        <accessMethod>Post</accessMethod>
+        <canvasUrl>https://my.allego.com/sfdcLogin/869_610.do</canvasUrl>
+        <locations>Chatter</locations>
+        <locations>Visualforce</locations>
+        <locations>Aura</locations>
+        <locations>Publisher</locations>
+        <locations>ChatterFeed</locations>
+        <locations>ServiceDesk</locations>
+        <locations>OpenCTI</locations>
+        <locations>MobileNav</locations>
+        <locations>PageLayout</locations>
+        <samlInitiationMethod>None</samlInitiationMethod>
+    </canvasConfig>
+    <contactEmail>jodonnell@quickbase.com</contactEmail>
+    <label>AllegoConnectedApp</label>
+    <oauthConfig>
+        <callbackUrl>https://my.allego.com/sfdcLogin/869_610.do</callbackUrl>
+        <consumerKey>3MVG98bly0AKZIIXbXfaAkxa19AR0LS0dKNNdqacXWCh89PQWUDcp0NQ9L16iHV_M51DEITnPAr81vnvCcf2T</consumerKey>
+        <isAdminApproved>true</isAdminApproved>
+        <isClientCredentialEnabled>false</isClientCredentialEnabled>
+        <isCodeCredentialEnabled>false</isCodeCredentialEnabled>
+        <isCodeCredentialPostOnly>false</isCodeCredentialPostOnly>
+        <isConsumerSecretOptional>false</isConsumerSecretOptional>
+        <isIntrospectAllTokens>false</isIntrospectAllTokens>
+        <isNamedUserJwtEnabled>false</isNamedUserJwtEnabled>
+        <isPkceRequired>false</isPkceRequired>
+        <isRefreshTokenRotationEnabled>false</isRefreshTokenRotationEnabled>
+        <isSecretRequiredForRefreshToken>false</isSecretRequiredForRefreshToken>
+        <isSecretRequiredForTokenExchange>false</isSecretRequiredForTokenExchange>
+        <isTokenExchangeEnabled>false</isTokenExchangeEnabled>
+        <scopes>Basic</scopes>
+        <scopes>RefreshToken</scopes>
+        <scopes>Lightning</scopes>
+    </oauthConfig>
+    <oauthPolicy>
+        <ipRelaxation>ENFORCE</ipRelaxation>
+        <isTokenExchangeFlowEnabled>false</isTokenExchangeFlowEnabled>
+        <refreshTokenPolicy>infinite</refreshTokenPolicy>
+    </oauthPolicy>
+    <permissionSetName>Test - System Admin</permissionSetName>
+    <permissionSetName>System Admin permission set</permissionSetName>
+    <profileName>QB - Customer PS/Success</profileName>
+    <profileName>QB - Finance</profileName>
+    <profileName>QB - Legal</profileName>
+    <profileName>QB - Marketing</profileName>
+    <profileName>QB - SDR</profileName>
+    <profileName>QB - Sales Operations</profileName>
+    <profileName>QB - Super User</profileName>
+    <profileName>QB - Sales Rep</profileName>
+    <profileName>QB - Solution Consultant</profileName>
+    <profileName>System Administrator</profileName>
+    <profileName>TEST DUMMY</profileName>
+    <profileName>QB - Sales Rep - backup temp 5-9-24</profileName>
+    <profileName>QB - Technical Support</profileName>
+    <profileName>System Administrator Analytics</profileName>
+    <profileName>QB - Product Management</profileName>
+    <profileName>QB - SRE</profileName>
+    <profileName>QB - Product Development</profileName>
+    <profileName>QB - Technical Support Manager</profileName>
+    <profileName>Salesforce Integration Admin - IP Testing</profileName>
+</ConnectedApp>

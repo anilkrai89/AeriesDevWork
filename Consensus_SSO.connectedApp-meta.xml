@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConnectedApp xmlns="http://soap.sforce.com/2006/04/metadata">
+    <contactEmail>awilson@quickbase.com</contactEmail>
+    <label>Consensus SSO</label>
+    <plugin>Consensus__ConsensusSSOPlugin</plugin>
+    <samlConfig>
+        <acsUrl>https://app.goconsensus.com/sso/auth/signin/23d385dc-c149-429b-b053-cadb82a7fcd1</acsUrl>
+        <encryptionType>AES_128</encryptionType>
+        <entityUrl>app.goconsensus.com-23d385dc-c149-429b-b053-cadb82a7fcd1</entityUrl>
+        <issuer>https://quickbase.my.salesforce.com</issuer>
+        <samlNameIdFormat>Transient</samlNameIdFormat>
+        <samlSigningAlgoType>SHA1</samlSigningAlgoType>
+        <samlSubjectCustomAttr>Consensus_SSO_Email</samlSubjectCustomAttr>
+        <samlSubjectType>CustomAttribute</samlSubjectType>
+    </samlConfig>
+</ConnectedApp>

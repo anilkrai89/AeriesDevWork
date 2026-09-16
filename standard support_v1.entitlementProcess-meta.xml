@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EntitlementProcess xmlns="http://soap.sforce.com/2006/04/metadata">
+    <SObjectType>Case</SObjectType>
+    <active>false</active>
+    <entryStartDateField>Case.CreatedDate</entryStartDateField>
+    <exitCriteriaFilterItems>
+        <field>Case.First_Response_D_T__c</field>
+        <operation>notEqual</operation>
+        <value></value>
+    </exitCriteriaFilterItems>
+    <isVersionDefault>false</isVersionDefault>
+    <milestones>
+        <isDisplayedOnLinkedEntity>false</isDisplayedOnLinkedEntity>
+        <milestoneCriteriaFormula>AND(
+	ISPICKVAL(Type, &apos;Standard&apos;), 
+        OR(
+                Routing_Issue_Type__c == &apos;Non-Technical&apos;, 
+                Routing_Issue_Type__c == &apos;Technical&apos;
+        ),
+	ISBLANK(TEXT(Contact.Active_services__c)), 
+	OR(
+		NOT(Contact.X24_7_Hand_off_Contact__c), 
+		Contact.US_Support_required__c
+	),
+	NOT(Contact.Premium_Support_Contact__c)
+)</milestoneCriteriaFormula>
+        <milestoneName>24HR - First Response to Customer</milestoneName>
+        <minutesToComplete>1440</minutesToComplete>
+        <timeTriggers>
+            <actions>
+                <name>Email_Alert_15_minutes_from_breaching_our_first_response_SLA</name>
+                <type>Alert</type>
+            </actions>
+            <timeLength>-15</timeLength>
+            <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>
+        </timeTriggers>
+        <useCriteriaStartTime>true</useCriteriaStartTime>
+    </milestones>
+    <milestones>
+        <businessHours>12 AM to 12 AM (Monday to Sunday)</businessHours>
+        <isDisplayedOnLinkedEntity>false</isDisplayedOnLinkedEntity>
+        <milestoneCriteriaFormula>AND(
+	ISPICKVAL(Type, &apos;Standard&apos;), 
+        OR(
+                Routing_Issue_Type__c == &apos;Non-Technical&apos;, 
+                Routing_Issue_Type__c == &apos;Technical&apos;
+        ),
+	ISBLANK(TEXT(Contact.Active_services__c)), 
+	Contact.X24_7_Hand_off_Contact__c, 
+	NOT(Contact.US_Support_required__c),
+	NOT(Contact.Premium_Support_Contact__c)
+)</milestoneCriteriaFormula>
+        <milestoneName>24HR - First Response to Customer</milestoneName>
+        <minutesToComplete>1440</minutesToComplete>
+        <timeTriggers>
+            <actions>
+                <name>Email_Alert_15_minutes_from_breaching_our_first_response_SLA</name>
+                <type>Alert</type>
+            </actions>
+            <timeLength>-15</timeLength>
+            <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>
+        </timeTriggers>
+        <useCriteriaStartTime>true</useCriteriaStartTime>
+    </milestones>
+    <milestones>
+        <isDisplayedOnLinkedEntity>false</isDisplayedOnLinkedEntity>
+        <milestoneCriteriaFormula>AND(
+	ISPICKVAL(Type, &apos;Standard&apos;), 
+        OR(
+                Routing_Issue_Type__c == &apos;Non-Technical&apos;, 
+                Routing_Issue_Type__c == &apos;Technical&apos;
+        ),
+	ISBLANK(TEXT(Contact.Active_services__c)), 
+	OR(
+		NOT(Contact.X24_7_Hand_off_Contact__c), 
+		Contact.US_Support_required__c
+	),
+	Contact.Premium_Support_Contact__c
+)</milestoneCriteriaFormula>
+        <milestoneName>1HR - First Response to Customer</milestoneName>
+        <minutesToComplete>60</minutesToComplete>
+        <timeTriggers>
+            <actions>
+                <name>Email_Alert_15_minutes_from_breaching_our_first_response_SLA</name>
+                <type>Alert</type>
+            </actions>
+            <timeLength>-15</timeLength>
+            <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>
+        </timeTriggers>
+        <useCriteriaStartTime>true</useCriteriaStartTime>
+    </milestones>
+    <milestones>
+        <businessHours>12 AM to 12 AM (Monday to Sunday)</businessHours>
+        <isDisplayedOnLinkedEntity>false</isDisplayedOnLinkedEntity>
+        <milestoneCriteriaFormula>AND(
+	ISPICKVAL(Type, &apos;Standard&apos;), 
+        OR(
+                Routing_Issue_Type__c == &apos;Non-Technical&apos;, 
+                Routing_Issue_Type__c == &apos;Technical&apos;
+        ),
+	ISBLANK(TEXT(Contact.Active_services__c)), 
+	Contact.X24_7_Hand_off_Contact__c, 
+	NOT(Contact.US_Support_required__c),
+	Contact.Premium_Support_Contact__c
+)</milestoneCriteriaFormula>
+        <milestoneName>1HR - First Response to Customer</milestoneName>
+        <minutesToComplete>60</minutesToComplete>
+        <timeTriggers>
+            <actions>
+                <name>Email_Alert_15_minutes_from_breaching_our_first_response_SLA</name>
+                <type>Alert</type>
+            </actions>
+            <timeLength>-15</timeLength>
+            <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>
+        </timeTriggers>
+        <useCriteriaStartTime>true</useCriteriaStartTime>
+    </milestones>
+    <name>Standard Support</name>
+    <versionMaster>552Ec000007dchO</versionMaster>
+    <versionNumber>1</versionNumber>
+</EntitlementProcess>
