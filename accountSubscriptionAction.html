@@ -1,0 +1,19 @@
+<template>
+  <lightning-card title="Account Subscription">
+    <div class="slds-p-around_medium">
+      <template if:true={loading}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+      </template>
+
+      <p class="slds-m-bottom_small">{statusText}</p>
+
+      <lightning-button
+        variant="brand"
+        label={buttonLabel}
+        onclick={handleClick}
+        disabled={disableButton}
+      >
+      </lightning-button>
+    </div>
+  </lightning-card>
+</template>

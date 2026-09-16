@@ -1,0 +1,1 @@
+trigger UpdateOrPreventDuplicateOpportunityContactRole on OpportunityContactRole (before insert, before update) {}

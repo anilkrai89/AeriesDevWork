@@ -1,0 +1,48 @@
+/* Outer container aligned to SLDS spacing */
+.container {
+    padding: 0.5rem 0.75rem;
+}
+
+/* Reduce space below search input */
+.search-input {
+    margin-bottom: 0.25rem;
+}
+
+/* 🔒 Scroll boundary – exactly 5 rows visible */
+.results-container {
+    max-height: 7.5rem;          /* 5 × 1.5rem rows */
+    overflow-y: auto;            /* force scrollbar */
+    border: 1px solid #dddbda;
+    border-radius: 0.25rem;
+    background-color: #ffffff;
+}
+
+/* 🔒 Fixed-height row to prevent auto-expand */
+.result-row {
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    padding: 0 0.5rem;
+    border-bottom: 1px solid #f3f2f2;
+    box-sizing: border-box;
+}
+
+/* Remove divider on last row */
+.result-row:last-child {
+    border-bottom: none;
+}
+
+/* Prevent lightning-button from resizing rows */
+.result-row lightning-button {
+    width: 100%;
+    justify-content: flex-start;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Selected watchers text */
+.selected-text {
+    margin-top: 0.25rem;
+    line-height: 1.4;
+}

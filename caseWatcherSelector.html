@@ -1,0 +1,41 @@
+<template>
+    <lightning-card title="">
+        <div class="container">
+
+            <!-- Search -->
+            <lightning-input
+                class="search-input"
+                type="search"
+                label="Search by name or email"
+                onchange={handleSearch}>
+            </lightning-input>
+
+            <!-- Search Results (scrollable, fixed height) -->
+            <template if:true={searchResults.length}>
+                <div class="results-container">
+                    <ul class="results-list">
+                        <template for:each={searchResults} for:item="c">
+                            <li key={c.id} class="result-item">
+                                <lightning-button
+                                    variant="base"
+                                    label={c.label}
+                                    data-id={c.id}
+                                    onclick={addWatcher}>
+                                </lightning-button>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+            </template>
+
+            <!-- Selected Watchers -->
+            <template if:true={selectedEmails.length}>
+                <div class="selected-text slds-text-body_small">
+                    <strong>Selected Watchers:</strong>
+                    {selectedEmailsString}
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>
