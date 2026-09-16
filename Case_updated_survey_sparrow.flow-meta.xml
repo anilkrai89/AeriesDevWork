@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>test_action</name>
+        <label>test action</label>
+        <locationX>308</locationX>
+        <locationY>539</locationY>
+        <actionName>SVSP__SS_SurveyIntegrationManagerClass</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>sobjectRecordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>surveyRunnerName</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>Quickbase TS Case Survey - Clone(POC)</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>SVSP__SS_SurveyIntegrationManagerClass</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>survey_Check</name>
+        <label>survey Check</label>
+        <locationX>176</locationX>
+        <locationY>431</locationY>
+        <defaultConnector>
+            <targetReference>test_action</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Dont_allow_to_send_survey</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>CheckForSurvey.Id</leftValueReference>
+                <operator>NotEqualTo</operator>
+            </conditions>
+            <label>Dont allow to send survey</label>
+        </rules>
+    </decisions>
+    <description>send surveys for standard cases</description>
+    <environments>Default</environments>
+    <interviewLabel>Case updated- survey sparrow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Case updated- survey sparrow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>CheckForSurvey</name>
+        <label>CheckForSurvey</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>survey_Check</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Related_Case__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Survey_Response__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>CheckForSurvey</targetReference>
+        </connector>
+        <filterFormula>AND(
+  ISCHANGED({!$Record.Status}),
+  ISPICKVAL({!$Record.Status}, &quot;Closed&quot;),
+  NOT(ISPICKVAL({!$Record.Case_Resolution__c},&quot;Customer Ran Into a Bug&quot;)),
+  ISPICKVAL({!$Record.Type}, &quot;Standard&quot;)
+)</filterFormula>
+        <object>Case</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

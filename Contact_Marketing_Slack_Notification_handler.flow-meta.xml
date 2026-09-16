@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <interviewLabel>Contact: Marketing Slack Notification handler {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Contact: Marketing Slack Notification handler</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Add_Most_Recent_Slack_Timestamp</name>
+        <label>Add Most Recent Slack Timestamp</label>
+        <locationX>716</locationX>
+        <locationY>583</locationY>
+        <inputAssignments>
+            <field>Most_Recent_Slack_Notification_Timestamp__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>595</locationX>
+        <locationY>48</locationY>
+        <connector>
+            <targetReference>Call_Slack_Notification_subflow</targetReference>
+        </connector>
+        <filterFormula>OR(
+
+AND(ISNEW(), NOT(ISBLANK({!$Record.Marketing_Slack_Notification__c}))),
+
+AND(NOT(ISBLANK({!$Record.Marketing_Slack_Notification__c})), ISCHANGED({!$Record.Marketing_Slack_Notification__c}))
+
+)</filterFormula>
+        <object>Contact</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Call_Slack_Notification_subflow</name>
+        <label>Call Slack Notification subflow</label>
+        <locationX>732</locationX>
+        <locationY>369</locationY>
+        <connector>
+            <targetReference>Add_Most_Recent_Slack_Timestamp</targetReference>
+        </connector>
+        <flowName>Subflow_Send_slack_notification</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varCompany</name>
+            <value>
+                <elementReference>$Record.Account.Name</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varEmail</name>
+            <value>
+                <elementReference>$Record.Email</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varName</name>
+            <value>
+                <stringValue>{!$Record.FirstName} {!$Record.LastName}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varPhone</name>
+            <value>
+                <elementReference>$Record.Phone</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varSlackNotification</name>
+            <value>
+                <elementReference>$Record.Marketing_Slack_Notification__c</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+</Flow>

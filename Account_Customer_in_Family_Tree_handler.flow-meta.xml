@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_single_Account_variables</name>
+        <label>Assign single Account variables</label>
+        <locationX>280</locationX>
+        <locationY>580</locationY>
+        <assignmentItems>
+            <assignToReference>vrecAccount.Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_thru_Hierarchy_accounts_for_Customer_in_Family_Tree_TRUE.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>vrecAccount.Customer_in_Family_Tree__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_single_variables_to_collection</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_single_Account_variables_0</name>
+        <label>Assign single Account variables</label>
+        <locationX>1218</locationX>
+        <locationY>608</locationY>
+        <assignmentItems>
+            <assignToReference>vrecAccount.Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_thru_Hierarchy_accounts_for_Customer_in_Family_Tree_FALSE.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>vrecAccount.Customer_in_Family_Tree__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_single_variables_to_collection_0</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_single_variables_to_collection</name>
+        <label>Assign single variables to collection</label>
+        <locationX>280</locationX>
+        <locationY>861</locationY>
+        <assignmentItems>
+            <assignToReference>vreccollAccounts</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>vrecAccount</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_thru_Hierarchy_accounts_for_Customer_in_Family_Tree_TRUE</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_single_variables_to_collection_0</name>
+        <label>Assign single variables to collection</label>
+        <locationX>1231</locationX>
+        <locationY>850</locationY>
+        <assignmentItems>
+            <assignToReference>vreccollAccounts</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>vrecAccount</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_thru_Hierarchy_accounts_for_Customer_in_Family_Tree_FALSE</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Are_there_any_Accounts_to_update</name>
+        <label>Are there any Accounts to update?</label>
+        <locationX>743</locationX>
+        <locationY>885</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Accounts_to_update</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>vreccollAccounts</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_all_Hierarchy_Accounts</targetReference>
+            </connector>
+            <label>Yes - Accounts to update</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Customer_in_Family_Tree_already_set_to_false</name>
+        <label>Is Customer in Family Tree already set to false?</label>
+        <locationX>1096</locationX>
+        <locationY>507</locationY>
+        <defaultConnector>
+            <targetReference>Assign_single_Account_variables_0</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_already_set_to_false</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_thru_Hierarchy_accounts_for_Customer_in_Family_Tree_TRUE.Customer_in_Family_Tree__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_thru_Hierarchy_accounts_for_Customer_in_Family_Tree_FALSE</targetReference>
+            </connector>
+            <label>Yes - already set to false</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Customer_in_Family_Tree_already_set_to_true</name>
+        <label>Is Customer in Family Tree already set to true?</label>
+        <locationX>436</locationX>
+        <locationY>488</locationY>
+        <defaultConnector>
+            <targetReference>Assign_single_Account_variables</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_already_set_to_true</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_thru_Hierarchy_accounts_for_Customer_in_Family_Tree_TRUE.Customer_in_Family_Tree__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_thru_Hierarchy_accounts_for_Customer_in_Family_Tree_TRUE</targetReference>
+            </connector>
+            <label>Yes - already set to true</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Was_any_ARR_FF_ARR_found_in_the_hierarchy</name>
+        <label>Was any ARR/FF ARR found in the hierarchy?</label>
+        <locationX>748</locationX>
+        <locationY>590</locationY>
+        <defaultConnector>
+            <targetReference>Loop_thru_Hierarchy_accounts_for_Customer_in_Family_Tree_FALSE</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_ARR_FF_ARR_was_found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Check_for_any_ARR_FF_ARR_in_Hierarchy</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_thru_Hierarchy_accounts_for_Customer_in_Family_Tree_TRUE</targetReference>
+            </connector>
+            <label>Yes - ARR/FF ARR was found</label>
+        </rules>
+    </decisions>
+    <description>Flow to update the &apos;Customer in Family Tree&apos; checkbox based on if any Account in the Hierarchy has an ARR/FF ARR value when the ARR/FF ARR on a single Account is set to 0 or less</description>
+    <environments>Default</environments>
+    <interviewLabel>Account: Customer in Family Tree handler {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Account: Customer in Family Tree handler</label>
+    <loops>
+        <name>Loop_thru_Hierarchy_accounts_for_Customer_in_Family_Tree_FALSE</name>
+        <label>Loop thru Hierarchy accounts for Customer in Family Tree = FALSE</label>
+        <locationX>985</locationX>
+        <locationY>741</locationY>
+        <collectionReference>Get_all_Accounts_in_Hierarchy</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Is_Customer_in_Family_Tree_already_set_to_false</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Are_there_any_Accounts_to_update</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>Loop_thru_Hierarchy_accounts_for_Customer_in_Family_Tree_TRUE</name>
+        <label>Loop thru Hierarchy accounts for Customer in Family Tree = TRUE</label>
+        <locationX>515</locationX>
+        <locationY>734</locationY>
+        <collectionReference>Get_all_Accounts_in_Hierarchy</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Is_Customer_in_Family_Tree_already_set_to_true</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Are_there_any_Accounts_to_update</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Check_for_any_ARR_FF_ARR_in_Hierarchy</name>
+        <label>Check for any ARR/FF ARR in Hierarchy</label>
+        <locationX>669</locationX>
+        <locationY>390</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_all_Accounts_in_Hierarchy</targetReference>
+        </connector>
+        <filterLogic>1 AND (2 OR 3)</filterLogic>
+        <filters>
+            <field>Ultimate_Parent_ID__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Ultimate_Parent_ID__c</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Temp_ARR__c</field>
+            <operator>GreaterThan</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </filters>
+        <filters>
+            <field>FastField_ARR__c</field>
+            <operator>GreaterThan</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_all_Accounts_in_Hierarchy</name>
+        <label>Get all Accounts in Hierarchy</label>
+        <locationX>882</locationX>
+        <locationY>392</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Was_any_ARR_FF_ARR_found_in_the_hierarchy</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Ultimate_Parent_ID__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Ultimate_Parent_ID__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_all_Hierarchy_Accounts</name>
+        <label>Update all Hierarchy Accounts</label>
+        <locationX>754</locationX>
+        <locationY>1099</locationY>
+        <inputReference>vreccollAccounts</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>530</locationX>
+        <locationY>48</locationY>
+        <connector>
+            <targetReference>Check_for_any_ARR_FF_ARR_in_Hierarchy</targetReference>
+        </connector>
+        <filterFormula>AND(
+
+OR(
+ISCHANGED({!$Record.Temp_ARR__c}),
+ISCHANGED({!$Record.FastField_ARR__c})),
+
+OR(
+
+({!$Record__Prior.Temp_ARR__c} &lt;= 0 || ISBLANK({!$Record__Prior.Temp_ARR__c})) &amp;&amp; {!$Record.Temp_ARR__c} &gt; 0,
+
+({!$Record__Prior.FastField_ARR__c} &lt;= 0 || ISBLANK({!$Record__Prior.FastField_ARR__c})) &amp;&amp; {!$Record.FastField_ARR__c} &gt; 0,
+
+({!$Record.FastField_ARR__c} &lt;= 0 || ISBLANK({!$Record.FastField_ARR__c}) &amp;&amp; {!$Record__Prior.FastField_ARR__c} &gt; 0),
+
+({!$Record.Temp_ARR__c} &lt;= 0 || ISBLANK({!$Record__Prior.Temp_ARR__c}) &amp;&amp; {!$Record__Prior.Temp_ARR__c} &gt; 0)))</filterFormula>
+        <object>Account</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>vrecAccount</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Account</objectType>
+    </variables>
+    <variables>
+        <name>vreccollAccounts</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Account</objectType>
+    </variables>
+</Flow>

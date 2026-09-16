@@ -1,0 +1,724 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>53.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <description>Assign Account to record variable</description>
+        <name>Account_In_to_Out</name>
+        <label>Account In to Out</label>
+        <locationX>907</locationX>
+        <locationY>911</locationY>
+        <assignmentItems>
+            <assignToReference>sobjAccount</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Related_Account</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Is_Team_Role_CAE</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>No member is SDR - clear the field</description>
+        <name>Assign_Blank_SDR_to_Account</name>
+        <label>Assign Blank SDR to Account</label>
+        <locationX>747</locationX>
+        <locationY>1847</locationY>
+        <assignmentItems>
+            <assignToReference>sobjAccount.SDR_Owner__c</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <connector>
+            <targetReference>Is_Team_Role_CSM</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>If no CAE is assigned to Account Team, update CAE Needed on Account to True.</description>
+        <name>Assign_CAE_Needed_to_True</name>
+        <label>Assign CAE Needed to True</label>
+        <locationX>280</locationX>
+        <locationY>1235</locationY>
+        <assignmentItems>
+            <assignToReference>sobjAccount.CAE_Needed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Is_Team_Role_SDR</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_it_to_Primary_CSM_on_Account</name>
+        <label>Assign it to Primary CSM on Account</label>
+        <locationX>280</locationX>
+        <locationY>2435</locationY>
+        <assignmentItems>
+            <assignToReference>sobjAccount.Primary_CSM__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.UserId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Account_Update_Needed</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_it_to_Primary_Renewal_Specialist</name>
+        <label>Assign it to Primary Renewal Specialist</label>
+        <locationX>50</locationX>
+        <locationY>2444</locationY>
+        <assignmentItems>
+            <assignToReference>sobjAccount.Primary_Renewal_Specialist__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.UserId</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>If no CAE Team Member was found on the Account Team, set boolean value to True.</description>
+        <name>Assign_No_Other_CAE</name>
+        <label>Assign No Other CAE</label>
+        <locationX>1534</locationX>
+        <locationY>1343</locationY>
+        <assignmentItems>
+            <assignToReference>boolNoOtherCAE</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Account_CAE_Needed</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Some other team member - Latest SDR is the sdr</description>
+        <name>Assign_Other_SDR_to_Account</name>
+        <label>Assign Other SDR to Account</label>
+        <locationX>478</locationX>
+        <locationY>1751</locationY>
+        <assignmentItems>
+            <assignToReference>sobjAccount.SDR_Owner__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Latest_SDR_Not_this_User.UserId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Is_Team_Role_CSM</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This member is SDR - latest modified - assign them</description>
+        <name>Assign_This_SDR_to_Account</name>
+        <label>Assign This SDR to Account</label>
+        <locationX>220</locationX>
+        <locationY>1744</locationY>
+        <assignmentItems>
+            <assignToReference>sobjAccount.SDR_Owner__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.UserId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Is_Team_Role_CSM</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>If a CAE is assigned to Account Team, assign CAE Needed on Account to False.</description>
+        <name>CAE_Needed_to_False</name>
+        <label>CAE Needed to False</label>
+        <locationX>544</locationX>
+        <locationY>1235</locationY>
+        <assignmentItems>
+            <assignToReference>sobjAccount.CAE_Needed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Is_Team_Role_SDR</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>ExecutiveSponsor</name>
+        <label>ExecutiveSponsor</label>
+        <locationX>1006</locationX>
+        <locationY>1127</locationY>
+        <assignmentItems>
+            <assignToReference>sobjAccount.Executive_Sponsor__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.UserId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Account</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <description>Criteria to check if CAE Needed on Account has correct assignment. If a CAE Exists on Account Team, CAE Needed should be False. If no CAE Exists, CAE Needed should be True.</description>
+        <name>Account_CAE_Needed</name>
+        <label>Account CAE Needed</label>
+        <locationX>412</locationX>
+        <locationY>1127</locationY>
+        <defaultConnector>
+            <targetReference>CAE_Needed_to_False</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Account CAE not Needed</defaultConnectorLabel>
+        <rules>
+            <name>outcome_Account_CAE_Needed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>boolNoOtherCAE</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.TeamMemberRole</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Customer Account Executive</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_CAE_Needed_to_True</targetReference>
+            </connector>
+            <label>Account CAE Needed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Update Account record if SDR Owner or CAE Needed on Account needs Update</description>
+        <name>Account_Update_Needed</name>
+        <label>Account Update Needed</label>
+        <locationX>412</locationX>
+        <locationY>2627</locationY>
+        <defaultConnectorLabel>No Update Needed</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Update_Account</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Related_Account.CAE_Needed__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>sobjAccount.CAE_Needed__c</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Related_Account.SDR_Owner__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>sobjAccount.SDR_Owner__c</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Related_Account.Primary_CSM__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>sobjAccount.Primary_CSM__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Account</targetReference>
+            </connector>
+            <label>Yes Update Account</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Does running user has Bypass Flow permission?</description>
+        <name>Current_User_Bypasses_Flows</name>
+        <label>Current User Bypasses Flows</label>
+        <locationX>829</locationX>
+        <locationY>371</locationY>
+        <defaultConnector>
+            <targetReference>Get_User</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No - Don&apos;t Bypass the Flow</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Bypass</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$User.Bypass_Flows_User__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Account.IsVRBypassed__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Yes Bypass</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Was a CAE Team Member found on the Account Team?</description>
+        <name>Got_CAE_Account_Team_Members</name>
+        <label>Got CAE Account Team Members</label>
+        <locationX>1402</locationX>
+        <locationY>1235</locationY>
+        <defaultConnector>
+            <targetReference>Assign_No_Other_CAE</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No CAE AT Members</defaultConnectorLabel>
+        <rules>
+            <name>Yes_CAE_Members</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_CAE_Account_Team_Members</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Account_CAE_Needed</targetReference>
+            </connector>
+            <label>Yes CAE Members</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Other SDR Team Member found?</description>
+        <name>Got_Other_SDR</name>
+        <label>Got Other SDR</label>
+        <locationX>610</locationX>
+        <locationY>1643</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Blank_SDR_to_Account</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Other SDR</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Other_SDR</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Latest_SDR_Not_this_User</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Other_SDR_to_Account</targetReference>
+            </connector>
+            <label>Yes Other SDR</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Found related Account?</description>
+        <name>Got_Related_Account</name>
+        <label>Got Related Account</label>
+        <locationX>1353</locationX>
+        <locationY>803</locationY>
+        <defaultConnectorLabel>No Related Account</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Related_Account</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Related_Account</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Account_In_to_Out</targetReference>
+            </connector>
+            <label>Yes Related Account</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Was the user found?</description>
+        <name>Got_User_Active</name>
+        <label>Got User (Active)</label>
+        <locationX>1708</locationX>
+        <locationY>587</locationY>
+        <defaultConnectorLabel>No User</defaultConnectorLabel>
+        <rules>
+            <name>Yes_User</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_User</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Related_Account</targetReference>
+            </connector>
+            <label>Yes User</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check to see if current Team Member is now assigned as CAE or if was a CAE Prior</description>
+        <name>Is_Team_Role_CAE</name>
+        <label>Is Team Role CAE</label>
+        <locationX>907</locationX>
+        <locationY>1019</locationY>
+        <defaultConnector>
+            <targetReference>Get_CAE_Account_Team_Members</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Not CAE Team Role</defaultConnectorLabel>
+        <rules>
+            <name>Current_Role_CAE</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.TeamMemberRole</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Customer Account Executive</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Account_CAE_Needed</targetReference>
+            </connector>
+            <label>Current Role CAE</label>
+        </rules>
+        <rules>
+            <name>Executive_Sponsor</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.TeamMemberRole</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Executive Sponsor</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>ExecutiveSponsor</targetReference>
+            </connector>
+            <label>Executive Sponsor</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Team_Role_CSM</name>
+        <label>Is Team Role CSM?</label>
+        <locationX>570</locationX>
+        <locationY>2153</locationY>
+        <defaultConnector>
+            <targetReference>Account_Update_Needed</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Current_Role_CSM</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.TeamMemberRole</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Executive CSM</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_it_to_Primary_CSM_on_Account</targetReference>
+            </connector>
+            <label>Yes Current Role CSM</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Team_Role_RS</name>
+        <label>Is Team Role RS?</label>
+        <locationX>77</locationX>
+        <locationY>2259</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Current_Role_is_RS</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.TeamMemberRole</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Renewal Specialist</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_it_to_Primary_Renewal_Specialist</targetReference>
+            </connector>
+            <label>Yes Current Role is RS</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Is the current Team Member assigned as SDR or was SDR prior</description>
+        <name>Is_Team_Role_SDR</name>
+        <label>Is Team Role SDR</label>
+        <locationX>412</locationX>
+        <locationY>1427</locationY>
+        <defaultConnector>
+            <targetReference>Get_Latest_SDR_Not_this_User</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Not SDR</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Now_SDR</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.TeamMemberRole</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Sales Development Rep</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_This_SDR_to_Account</targetReference>
+            </connector>
+            <label>Yes Now SDR</label>
+        </rules>
+    </decisions>
+    <description>Removed path that assigns Renewal Specialist - moved to Territory based assignments</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>If Current Member Is a CAE - this = False.
+If No other CAE members are found - this = TRUE</description>
+        <name>frmCAENeeded</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(
+ NOT( ISPICKVAL({!$Record.TeamMemberRole},&quot;Channel Account Executive&quot;)),
+{!boolNoOtherCAE},TRUE, 
+TRUE, FALSE)</expression>
+    </formulas>
+    <formulas>
+        <name>frmCurrentDateTime</name>
+        <dataType>DateTime</dataType>
+        <expression>NOW()</expression>
+    </formulas>
+    <interviewLabel>Account Team Member Updates</interviewLabel>
+    <label>Account Team Member Updates</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Get Channel Account Executive Team Member from Account Team</description>
+        <name>Get_CAE_Account_Team_Members</name>
+        <label>Get CAE Account Team Members</label>
+        <locationX>1402</locationX>
+        <locationY>1127</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Got_CAE_Account_Team_Members</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>AccountId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.AccountId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>TeamMemberRole</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Customer Account Executive</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>AccountTeamMember</object>
+        <sortField>CreatedDate</sortField>
+        <sortOrder>Desc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Get Account Team Members from related Account with Team Role Sales Development Rep that are not the current user from the Account Team Member that triggered the flow.</description>
+        <name>Get_Latest_SDR_Not_this_User</name>
+        <label>Get Latest SDR Not this User</label>
+        <locationX>610</locationX>
+        <locationY>1535</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Got_Other_SDR</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>AccountId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.AccountId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>UserId</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <elementReference>$Record.UserId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>TeamMemberRole</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Sales Development Rep</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>AccountTeamMember</object>
+        <sortField>CreatedDate</sortField>
+        <sortOrder>Desc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Get related Account of Account Team Member record</description>
+        <name>Get_Related_Account</name>
+        <label>Get Related Account</label>
+        <locationX>1353</locationX>
+        <locationY>695</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Got_Related_Account</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.AccountId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Get User assigned to Account Team Member record</description>
+        <name>Get_User</name>
+        <label>Get User</label>
+        <locationX>1708</locationX>
+        <locationY>479</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Got_User_Active</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.UserId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>IsActive</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>User</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <description>Update Account Record</description>
+        <name>Update_Account</name>
+        <label>Update Account</label>
+        <locationX>907</locationX>
+        <locationY>3011</locationY>
+        <inputReference>sobjAccount</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>703</locationX>
+        <locationY>48</locationY>
+        <connector>
+            <targetReference>Current_User_Bypasses_Flows</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>TeamMemberRole</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>AccountTeamMember</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>boolContinue</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <name>boolNoOtherCAE</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <name>boolNoSDRAtAll</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <name>ErrorNode</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>The Account for the team member(s) - to update</description>
+        <name>sobjAccount</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Account</objectType>
+    </variables>
+    <variables>
+        <name>sobjUpdatedContactColl</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Contact</objectType>
+    </variables>
+    <variables>
+        <name>TeamMemberCollectionVar</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+</Flow>

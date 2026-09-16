@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Case_is_created_in_the_after_hours_queue</name>
+        <label>Case is created in the after hours queue</label>
+        <locationX>506</locationX>
+        <locationY>384</locationY>
+        <actionName>slackPostMessage</actionName>
+        <actionType>slackPostMessage</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>slackAppIdForToken</name>
+            <value>
+                <stringValue>A01RDL2NJAH</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>slackWorkspaceIdForToken</name>
+            <value>
+                <stringValue>T024FPK7B</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>slackConversationId</name>
+            <value>
+                <stringValue>C075J1FMV9B</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>slackMessage</name>
+            <value>
+                <elementReference>CasehasbeencreatefortheafterhoursQueue</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>slackPostMessage</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>60.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Bypass_Flow</name>
+        <label>Bypass Flow?</label>
+        <locationX>374</locationX>
+        <locationY>276</locationY>
+        <defaultConnector>
+            <targetReference>Case_is_created_in_the_after_hours_queue</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Run Flow</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Bypass</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Permission.Exclude_from_Flows</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Yes Bypass</label>
+        </rules>
+    </decisions>
+    <description>This will send the slack notification</description>
+    <environments>Default</environments>
+    <interviewLabel>After Hours Queue Case Created {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>After Hours Queue Case Created</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>OwnerId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>00GUN0000024F0y</stringValue>
+            </value>
+        </filters>
+        <object>Case</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <scheduledPaths>
+            <name>Run_after_o_sec</name>
+            <connector>
+                <targetReference>Bypass_Flow</targetReference>
+            </connector>
+            <label>Run after o sec</label>
+            <offsetNumber>1</offsetNumber>
+            <offsetUnit>Minutes</offsetUnit>
+            <recordField>CreatedDate</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <description>This is the template used when a case has been created for the after hours queue.</description>
+        <name>CasehasbeencreatefortheafterhoursQueue</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Case {!$Record.CaseNumber} has been created and assigned to the After Hours Queue. Please work on this as soon as possible.</text>
+    </textTemplates>
+</Flow>

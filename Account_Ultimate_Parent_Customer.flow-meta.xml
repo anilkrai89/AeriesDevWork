@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>ByPass_User</name>
+        <label>ByPass User?</label>
+        <locationX>769</locationX>
+        <locationY>387</locationY>
+        <defaultConnector>
+            <targetReference>Family_Tree_Changes</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Don&apos;t Bypass</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Bypass_the_flow</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$User.Bypass_Flows_User__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Yes Bypass the flow</label>
+        </rules>
+    </decisions>
+    <description>Updated trigger to exclude records with the temporary bypass on - IsVRBypassed</description>
+    <environments>Default</environments>
+    <interviewLabel>Account Ultimate Parent Customer {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Account Ultimate Parent Customer</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>757</locationX>
+        <locationY>48</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Customer_in_Family_Tree__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Ultimate_Parent_checkbox__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>IsVRBypassed__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Account</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <scheduledPaths>
+            <connector>
+                <targetReference>ByPass_User</targetReference>
+            </connector>
+            <pathType>AsyncAfterCommit</pathType>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+    <subflows>
+        <name>Family_Tree_Changes</name>
+        <label>Family Tree Changes</label>
+        <locationX>881</locationX>
+        <locationY>563</locationY>
+        <flowName>Account_Family_Tree_Changes</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <triggerOrder>10</triggerOrder>
+</Flow>

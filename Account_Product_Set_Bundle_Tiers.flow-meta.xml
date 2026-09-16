@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Difference_in_AP_and_APT_Bundle_Tier</name>
+        <label>Difference in AP and APT Bundle Tier</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_they_are_different</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Bundle_Tier__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record.saascg__Account_Product__r.Bundle_Tier__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_AP</targetReference>
+            </connector>
+            <label>Yes, they are different</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>Account Product - Set Bundle Tiers {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Account Product - Set Bundle Tiers</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_AP</name>
+        <label>Update AP</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.saascg__Account_Product__r.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Bundle_Tier__c</field>
+            <value>
+                <elementReference>$Record.Bundle_Tier__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>saascg__SCG_Account_Product__c</object>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Difference_in_AP_and_APT_Bundle_Tier</targetReference>
+        </connector>
+        <object>saascg__SCG_Account_Product_Transaction__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

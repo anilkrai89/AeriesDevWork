@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>55.0</apiVersion>
+    <description>DEPRECATED - Can be safely deactivated</description>
+    <environments>Default</environments>
+    <label>Invitation to DemoBoard Quick Association (DEPRECATED)</label>
+    <processType>AutoLaunchedFlow</processType>
+</Flow>

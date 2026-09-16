@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>57.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Is_LeadShareOwner_Matching_current_Lead_Owner</name>
+        <label>Is LeadShareOwner Matching current Lead Owner</label>
+        <locationX>402</locationX>
+        <locationY>647</locationY>
+        <defaultConnector>
+            <targetReference>Loop_on_blocked_Owner_List</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>matched_owner</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_on_blocked_Owner_List.UserId__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record.Lead_or_Contact_Owner__c</elementReference>
+                </rightValue>
+            </conditions>
+            <label>matched owner</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Partner_Account_null</name>
+        <label>Is Partner Account empty?</label>
+        <locationX>182</locationX>
+        <locationY>1031</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Leads.Partner_Account__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_SAC_Partner_Lead_Record</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>Creating a Record to be used in Partner RR Lead Routing</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>IsinLeadShareFilters</name>
+        <dataType>Boolean</dataType>
+        <expression>OR(
+ISPICKVAL({!$Record.Lead.LeadSource}, &apos;Care&apos;),
+ISPICKVAL({!$Record.Lead.LeadSource}, &apos;CSM&apos;),
+ISPICKVAL({!$Record.Lead.LeadSource}, &apos;New App Creator&apos;),
+ISPICKVAL({!$Record.Lead.LeadSource}, &apos;Partner Deal Reg&apos;),
+ISPICKVAL({!$Record.Lead.LeadSource}, &apos;Recommended Play&apos;),
+ISPICKVAL({!$Record.Lead.LeadSource}, &apos;Re-Engage&apos;),
+ISPICKVAL({!$Record.Lead.LeadSource}, &apos;Referral&apos;),
+ISPICKVAL({!$Record.Lead.LeadSource}, &apos;Request a Solution Consultant&apos;),
+ISPICKVAL({!$Record.Lead.LeadSource}, &apos;Request Create Permissions&apos;),
+ISPICKVAL({!$Record.Lead.LeadSource}, &apos;Solution Architect&apos;),
+ISPICKVAL({!$Record.Lead.LeadSource}, &apos;Technical Enablement Consultant&apos;),
+ISPICKVAL({!$Record.Lead.LeadSource}, &apos;Customer Education&apos;),
+ISPICKVAL({!$Record.Lead.LeadSource}, &apos;Prospecting&apos;),
+ISPICKVAL({!$Record.Lead.LeadSource}, &apos;Zoominfo&apos;),
+ISPICKVAL({!$Record.Lead.LeadSource}, &apos;Lusha&apos;),
+ISPICKVAL({!$Record.Lead.LeadSource}, &apos;ABX&apos;)
+)</expression>
+    </formulas>
+    <interviewLabel>Create SAC Partner Lead Record {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Create SAC Partner Lead Record</label>
+    <loops>
+        <name>Loop_on_blocked_Owner_List</name>
+        <label>Loop on blocked Owner List</label>
+        <locationX>182</locationX>
+        <locationY>539</locationY>
+        <collectionReference>Get_LeadShareOwner_blocked_list</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Is_LeadShareOwner_Matching_current_Lead_Owner</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Is_Partner_Account_null</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_SAC_Partner_Lead_Record</name>
+        <label>Create SAC Partner Lead Record</label>
+        <locationX>50</locationX>
+        <locationY>1139</locationY>
+        <inputAssignments>
+            <field>Lead_Id__c</field>
+            <value>
+                <elementReference>$Record.LeadId</elementReference>
+            </value>
+        </inputAssignments>
+        <object>SAC_Partner_Lead__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Leads</name>
+        <label>Get Leads</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_LeadShareOwner_blocked_list</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.LeadId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Lead</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_LeadShareOwner_blocked_list</name>
+        <label>Get LeadShareOwner blocked list</label>
+        <locationX>182</locationX>
+        <locationY>431</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_on_blocked_Owner_List</targetReference>
+        </connector>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>LeadShareOwner__mdt</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Leads</targetReference>
+        </connector>
+        <filterLogic>1 AND 2 AND 3 AND 4 AND 5 AND 8  AND (6 OR 7) AND 9 AND 10 AND 11 AND 12 AND 13 AND 14 AND 15 AND 16 AND 17 AND 18 AND 19 AND 20</filterLogic>
+        <filters>
+            <field>LeadId</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Campaign_Name__c</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>Discovery Scheduled</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>LeadSource</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Prospecting</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>LeadSource</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Zoominfo</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>LeadSource</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>ABX</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Lead_or_Contact_Segment__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Commercial Land</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Lead_or_Contact_Segment__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Enterprise Land</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>LeadSource</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Lusha</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>LeadSource</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>CSM</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>LeadSource</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>New App Creator</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>LeadSource</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Partner Deal Reg</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>LeadSource</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Recommended Play</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>LeadSource</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Re-Engage</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>LeadSource</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Referral</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>LeadSource</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Request a Solution Consultant</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>LeadSource</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Request Create Permissions</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>LeadSource</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Solution Architect</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>LeadSource</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Technical Enablement Consultant</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>LeadSource</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Customer Education</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Lead_or_Contact_Segment__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>International</stringValue>
+            </value>
+        </filters>
+        <object>CampaignMember</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+</Flow>

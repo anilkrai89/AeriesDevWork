@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <interviewLabel>DocuSign Status: Scheduled/ Triggered {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>DocuSign Status: Scheduled/ Triggered</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_DocuSign_Envelope</name>
+        <label>Get DocuSign Envelope</label>
+        <locationX>883</locationX>
+        <locationY>377</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Update_DocuSign_Status</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>dfsle__DocuSignId__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.dfsle__DocuSignId__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>dfsle__Envelope__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_DocuSign_Status</name>
+        <label>Update DocuSign Status</label>
+        <locationX>880</locationX>
+        <locationY>536</locationY>
+        <inputAssignments>
+            <field>DocuSign_Envelope__c</field>
+            <value>
+                <elementReference>Get_DocuSign_Envelope.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>756</locationX>
+        <locationY>48</locationY>
+        <connector>
+            <targetReference>Get_DocuSign_Envelope</targetReference>
+        </connector>
+        <object>dfsle__EnvelopeStatus__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

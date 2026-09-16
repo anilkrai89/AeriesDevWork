@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Email_When_Rank_Changes</name>
+        <label>Email When Rank Changes</label>
+        <locationX>615</locationX>
+        <locationY>502</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <stringValue>jodonnell@quickbase.com, bsimon@quickbase.com, mperalta@quickbase.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <stringValue>noreply@quickbase.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Community User up ranked</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>tempEmailBodyRankChange</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Did_Rank_change</name>
+        <label>Did Rank change</label>
+        <locationX>595</locationX>
+        <locationY>321</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Rank_changed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.LiSFIntegration__Rank__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Email_When_Rank_Changes</targetReference>
+            </connector>
+            <label>Rank changed</label>
+        </rules>
+    </decisions>
+    <description>RTF on Community User custom object for Khoros Community Intregration</description>
+    <environments>Default</environments>
+    <interviewLabel>Community Users: updated {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Community Users: updated</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>635</locationX>
+        <locationY>48</locationY>
+        <connector>
+            <targetReference>Did_Rank_change</targetReference>
+        </connector>
+        <object>LiSFIntegration__Li_Community_User__c</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>tempEmailBodyRankChange</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;The following Community User changed Rank:&lt;/p&gt;&lt;p&gt;User: {!$Record.LiSFIntegration__First_Name__c} {!$Record.LiSFIntegration__Last_Name__c}&lt;/p&gt;&lt;p&gt;Email: {!$Record.LiSFIntegration__Email_Address__c}&lt;/p&gt;&lt;p&gt;Old Rank: {!$Record__Prior.LiSFIntegration__Rank__c}&lt;/p&gt;&lt;p&gt;New Rank: {!$Record.LiSFIntegration__Rank__c}&lt;/p&gt;&lt;p&gt;Date: {!$Flow.CurrentDateTime}&lt;/p&gt;</text>
+    </textTemplates>
+</Flow>

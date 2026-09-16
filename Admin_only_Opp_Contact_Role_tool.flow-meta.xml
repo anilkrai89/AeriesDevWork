@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Call_Contact_Role_subflow</name>
+        <label>Call Contact Role subflow</label>
+        <locationX>602</locationX>
+        <locationY>322</locationY>
+        <actionName>OpportunityContactRoleCounter</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>placeholder</name>
+            <value>
+                <stringValue>1</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>OpportunityContactRoleCounter</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>66.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <customProperties>
+        <name>ScreenProgressIndicator</name>
+        <value>
+            <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;simple&quot;}</stringValue>
+        </value>
+    </customProperties>
+    <environments>Default</environments>
+    <interviewLabel>Admin-only Opp Contact Role tool {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Admin-only Opp Contact Role tool</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <runInMode>SystemModeWithoutSharing</runInMode>
+    <start>
+        <locationX>567</locationX>
+        <locationY>48</locationY>
+        <connector>
+            <targetReference>Call_Contact_Role_subflow</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+</Flow>

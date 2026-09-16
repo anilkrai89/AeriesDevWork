@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Customer_to_Account_variable</name>
+        <label>Assign Customer to Account variable</label>
+        <locationX>656</locationX>
+        <locationY>802</locationY>
+        <assignmentItems>
+            <assignToReference>vrecAccount.Type</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Customer</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Account_with_new_Account_Type</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Former_Customer_to_Account_variable</name>
+        <label>Assign Former Customer to Account variable</label>
+        <locationX>1110</locationX>
+        <locationY>912</locationY>
+        <assignmentItems>
+            <assignToReference>vrecAccount.Type</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Former Customer</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Account_with_new_Account_Type</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_record_type_to_Account_variable</name>
+        <label>Assign record type to Account variable</label>
+        <locationX>338</locationX>
+        <locationY>641</locationY>
+        <assignmentItems>
+            <assignToReference>vrecAccount.Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>vrecAccount.RecordTypeId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_QB_Customer_Account_record_type.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Customer_Former_Customer_paths</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Customer_Former_Customer_paths</name>
+        <label>Customer/Former Customer paths</label>
+        <locationX>640</locationX>
+        <locationY>572</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Customer_path</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior.Temp_ARR__c</leftValueReference>
+                <operator>LessThanOrEqualTo</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Temp_ARR__c</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Customer_to_Account_variable</targetReference>
+            </connector>
+            <label>Customer path</label>
+        </rules>
+        <rules>
+            <name>Former_Customer_Path</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior.Temp_ARR__c</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Temp_ARR__c</leftValueReference>
+                <operator>LessThanOrEqualTo</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Look_for_any_Active_Contract_related_to_Account</targetReference>
+            </connector>
+            <label>Former Customer Path</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Permission_bypass_step</name>
+        <label>Permission bypass step</label>
+        <locationX>641</locationX>
+        <locationY>377</locationY>
+        <defaultConnector>
+            <targetReference>Get_QB_Customer_Account_record_type</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Bypass_flow_steps</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$User.Bypass_Flows_User__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Bypass flow steps</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>If the ARR was set to &lt;= 0, but there is still an Active Contract, the Account is still a Customer</description>
+        <name>Were_any_Active_Contracts_found</name>
+        <label>Were any Active Contracts found?</label>
+        <locationX>921</locationX>
+        <locationY>722</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Customer_to_Account_variable</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Active Contract was found</defaultConnectorLabel>
+        <rules>
+            <name>No_Active_Contracts_found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Look_for_any_Active_Contract_related_to_Account</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Former_Customer_to_Account_variable</targetReference>
+            </connector>
+            <label>No Active Contracts found</label>
+        </rules>
+    </decisions>
+    <description>A flow to handle when an Account should be flipped to or from Customer/Former Customer based on ARR value changes</description>
+    <environments>Default</environments>
+    <interviewLabel>Account: Customer/Former Customer handler flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Account: Customer/Former Customer handler flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_QB_Customer_Account_record_type</name>
+        <label>Get QB Customer Account record type</label>
+        <locationX>318</locationX>
+        <locationY>434</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_record_type_to_Account_variable</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>QB Customer</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>SobjectType</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Account</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RecordType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Look_for_any_Active_Contract_related_to_Account</name>
+        <label>Look for any Active Contract related to Account</label>
+        <locationX>1000</locationX>
+        <locationY>451</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Were_any_Active_Contracts_found</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>AccountId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Activated</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Contract</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Account_with_new_Account_Type</name>
+        <label>Update Account with new Account Type</label>
+        <locationX>866</locationX>
+        <locationY>1109</locationY>
+        <inputReference>vrecAccount</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>521</locationX>
+        <locationY>48</locationY>
+        <connector>
+            <targetReference>Permission_bypass_step</targetReference>
+        </connector>
+        <filterFormula>AND(
+/*ARR is changed*/
+ISCHANGED({!$Record.Temp_ARR__c}),
+NOT(CONTAINS(TEXT({!$Record.Type}), &apos;Partner&apos;)), 
+
+/*OR(
+TEXT($Record.Type) = &apos;Customer&apos;,
+TEXT($Record.Type) = &apos;Former Customer&apos;),*/
+
+OR(
+
+/*ARR changes from 0 to greater than 0 (Customer)*/
+({!$Record__Prior.Temp_ARR__c} &lt;= 0 || ISNULL({!$Record__Prior.Temp_ARR__c})) &amp;&amp; {!$Record.Temp_ARR__c} &gt; 0,
+
+/*ARR changes from a value greater than 0 to 0 or less (potential Former Customer)*/
+{!$Record.Temp_ARR__c} &lt;= 0 &amp;&amp; ({!$Record__Prior.Temp_ARR__c} &gt; 0 || ISNULL({!$Record__Prior.Temp_ARR__c}))))</filterFormula>
+        <object>Account</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+    <variables>
+        <name>vrecAccount</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Account</objectType>
+    </variables>
+</Flow>

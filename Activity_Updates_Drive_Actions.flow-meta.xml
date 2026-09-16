@@ -1,0 +1,764 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Collaboration_Task_is_Complete_Email_Alert</name>
+        <label>Collaboration Task is Complete Email Alert</label>
+        <locationX>501</locationX>
+        <locationY>1491</locationY>
+        <actionName>Task.Collaboration_Task_is_Complete</actionName>
+        <actionType>emailAlert</actionType>
+        <connector>
+            <targetReference>Is_there_a_lead</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Error_Sending_Complete_Collaboration_Task_Email_Alert</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Task.Collaboration_Task_is_Complete</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Email_Reassignment</name>
+        <label>Email Reassignment</label>
+        <locationX>416</locationX>
+        <locationY>1700</locationY>
+        <actionName>Task.Collaboration_Task_is_Reassigned</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Task.Collaboration_Task_is_Reassigned</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>53.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_AE_as_the_Task_Owner</name>
+        <label>Assign AE as the Task Owner</label>
+        <locationX>1015</locationX>
+        <locationY>339</locationY>
+        <assignmentItems>
+            <assignToReference>varTaskOwnerId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>SDROwnerFormula</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_the_Task_owner_on_ProApp_Task</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Queue_as_the_Task_Owner</name>
+        <label>Assign Queue as the Task Owner</label>
+        <locationX>909</locationX>
+        <locationY>660</locationY>
+        <assignmentItems>
+            <assignToReference>varTaskOwnerId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>00G5e000001snmKEAQ</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_the_Task_owner_on_ProApp_Task</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_SDR_as_the_Task_Owner</name>
+        <label>Assign SDR as the Task Owner</label>
+        <locationX>915</locationX>
+        <locationY>50</locationY>
+        <assignmentItems>
+            <assignToReference>varTaskOwnerId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>SDROwnerFormula</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_the_Task_owner_on_ProApp_Task</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Error_Getting_Lead</name>
+        <label>Error Getting Lead</label>
+        <locationX>889</locationX>
+        <locationY>884</locationY>
+        <assignmentItems>
+            <assignToReference>ErrorNode</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Error Getting Lead</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Create_Error_Log_Record</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Error_Sending_Complete_Collaboration_Task_Email_Alert</name>
+        <label>Error Sending Complete Collaboration Task Email Alert</label>
+        <locationX>1353</locationX>
+        <locationY>1492</locationY>
+        <assignmentItems>
+            <assignToReference>ErrorNode</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Error Sending Complete Collaboration Task Email Alert</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Create_Error_Log_Record</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Error_Updating_Lead</name>
+        <label>Error Updating Lead</label>
+        <locationX>1139</locationX>
+        <locationY>1098</locationY>
+        <assignmentItems>
+            <assignToReference>ErrorNode</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Error Updating Lead</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Create_Error_Log_Record</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Error_Updating_Requestor_Email</name>
+        <label>Error Updating Requestor Email</label>
+        <locationX>1200</locationX>
+        <locationY>1403</locationY>
+        <assignmentItems>
+            <assignToReference>ErrorNode</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Error Updating Requestor Email</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Create_Error_Log_Record</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Is_it_a_Collaboration_Task</name>
+        <label>Is it a Collaboration Task?</label>
+        <locationX>493</locationX>
+        <locationY>1036</locationY>
+        <defaultConnector>
+            <targetReference>Is_there_a_lead</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Collaboration_Request</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Requestor_Email</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_the_Contact_or_Lead_assigned_to_an_SDR_or_AE</name>
+        <label>Is the Contact or Lead assigned to an SDR or AE?</label>
+        <locationX>625</locationX>
+        <locationY>208</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Queue_as_the_Task_Owner</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Assign to Solution Consultant Queue</defaultConnectorLabel>
+        <rules>
+            <name>Yes_assigned_to_SDR</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_related_Contact.SDR_Owner__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_related_Lead.SDR_Owner__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_SDR_as_the_Task_Owner</targetReference>
+            </connector>
+            <label>Yes - assigned to SDR</label>
+        </rules>
+        <rules>
+            <name>Yes_assigned_to_AE</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_related_Contact.Owner.Profile.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>QB - Sales Rep</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_related_Contact.Owner.Profile.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>QB - SDR</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_related_Lead.Owner:User.Profile.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>QB - Sales Rep</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_related_Lead.Owner:User.Profile.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>QB - SDR</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_AE_as_the_Task_Owner</targetReference>
+            </connector>
+            <label>Yes - assigned to AE</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_the_Task_assigned_to_a_Contact_or_Lead</name>
+        <label>Is the Task assigned to a Contact or Lead?</label>
+        <locationX>614</locationX>
+        <locationY>563</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Queue_as_the_Task_Owner</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Lead or Contact</defaultConnectorLabel>
+        <rules>
+            <name>Pro_App_Task_is_assigned_to_a_Contact</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.WhoId</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>003</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_related_Contact</targetReference>
+            </connector>
+            <label>Pro App Task is assigned to a Contact</label>
+        </rules>
+        <rules>
+            <name>Pro_App_Task_is_assigned_to_a_Lead</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.WhoId</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>00Q</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_related_Lead</targetReference>
+            </connector>
+            <label>Pro App Task is assigned to a Lead</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_the_Task_Complete</name>
+        <label>Is the Task Complete?</label>
+        <locationX>285</locationX>
+        <locationY>1495</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_It_is_Complete</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Completed</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Collaboration_Task_is_Complete_Email_Alert</targetReference>
+            </connector>
+            <label>Yes It is Complete</label>
+        </rules>
+        <rules>
+            <name>Reassigned</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.OwnerId</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Detail__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Technical Resources</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.OwnerId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.OwnerId</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>005</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Email_Reassignment</targetReference>
+            </connector>
+            <label>Reassigned</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_there_a_lead</name>
+        <label>Is there a lead?</label>
+        <locationX>493</locationX>
+        <locationY>1248</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_there_is_a_lead</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.WhoId</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>00Q</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Lead</targetReference>
+            </connector>
+            <label>Yes there is a lead</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Also checking to see if the Task is already owned by a System Admin or Integration User</description>
+        <name>Is_this_a_new_Pro_App_Installed_Marketo_Task</name>
+        <label>Is this a new Pro App Installed Marketo Task?</label>
+        <locationX>489</locationX>
+        <locationY>733</locationY>
+        <defaultConnector>
+            <targetReference>Is_it_a_Collaboration_Task</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Pro_App_Installed_Marketo_Task</name>
+            <conditionLogic>1 AND 2 AND (3 OR 4)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Subject</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Pro App Installed</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.CreatedById</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>0055e0000071bH6AAI</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Owner:User.Integration_User__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Owner:User.Profile.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>System Administrator</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Queue_as_the_Task_Owner</targetReference>
+            </connector>
+            <label>Yes - Pro App Installed Marketo Task</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>User_Bypass_Flows</name>
+        <label>User Bypass Flows</label>
+        <locationX>191</locationX>
+        <locationY>545</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Don_t_bypass</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$User.Bypass_Flows_User__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Is_this_a_new_Pro_App_Installed_Marketo_Task</targetReference>
+            </connector>
+            <label>Don&apos;t bypass</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>What_Is_the_Status</name>
+        <label>What Is the Status?</label>
+        <locationX>885</locationX>
+        <locationY>1248</locationY>
+        <defaultConnectorLabel>Status is Not New</defaultConnectorLabel>
+        <rules>
+            <name>Drift_created_Task_w_New_Lead</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.CreatedBy.FirstName</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Drift Integration</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Lead.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>New</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Lead_from_Drift_Task</targetReference>
+            </connector>
+            <label>Drift-created Task w/ New Lead</label>
+        </rules>
+        <rules>
+            <name>Status_Is_New</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Lead.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>New</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Lead.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Marketing Qualified</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Lead</targetReference>
+            </connector>
+            <label>Status Is New</label>
+        </rules>
+    </decisions>
+    <description>Updated ProApp Tasks to always send to Solution Consultants queue</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>AEOwnerFormula</name>
+        <dataType>String</dataType>
+        <expression>IF({!Pro_App_Task_is_assigned_to_a_Lead}, {!Get_related_Lead.OwnerId}, 
+
+IF({!Pro_App_Task_is_assigned_to_a_Contact}, {!Get_related_Contact.OwnerId},
+
+{!$Record.OwnerId}))</expression>
+    </formulas>
+    <formulas>
+        <name>SDROwnerFormula</name>
+        <dataType>String</dataType>
+        <expression>IF(BEGINS({!$Record.WhoId}, &apos;00Q&apos;) &amp;&amp; NOT(ISBLANK({!Get_related_Lead.SDR_Owner__r.Id})),
+
+{!Get_related_Lead.SDR_Owner__r.Id},
+
+IF(BEGINS({!$Record.WhoId}, &apos;003&apos;) &amp;&amp; NOT(ISBLANK({!Get_related_Contact.SDR_Owner__r.Id})), 
+
+{!Get_related_Contact.SDR_Owner__r.Id},
+
+IF(BEGINS({!$Record.WhoId}, &apos;00Q&apos;), {!Get_related_Lead.OwnerId}, {!Get_related_Contact.OwnerId})))</expression>
+    </formulas>
+    <interviewLabel>Lead Updates {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Activity Updates Drive Actions</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_Error_Log_Record</name>
+        <label>Create Error Log Record</label>
+        <locationX>1460</locationX>
+        <locationY>1060</locationY>
+        <inputAssignments>
+            <field>Environment__c</field>
+            <value>
+                <stringValue>GearsDev1</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Error_Message__c</field>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Error_Node__c</field>
+            <value>
+                <elementReference>ErrorNode</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Execution_Time__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Key_Record_ID__c</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <stringValue>Activity Updates Drives Actions Flow</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Error_Log__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>Get_Lead</name>
+        <label>Get Lead</label>
+        <locationX>745</locationX>
+        <locationY>1246</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>What_Is_the_Status</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Error_Getting_Lead</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.WhoId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Lead</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_related_Contact</name>
+        <label>Get related Contact</label>
+        <locationX>592</locationX>
+        <locationY>417</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Is_the_Contact_or_Lead_assigned_to_an_SDR_or_AE</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.WhoId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Contact</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_related_Lead</name>
+        <label>Get related Lead</label>
+        <locationX>482</locationX>
+        <locationY>352</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Is_the_Contact_or_Lead_assigned_to_an_SDR_or_AE</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.WhoId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Lead</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Lead</name>
+        <label>Update Lead</label>
+        <locationX>1116</locationX>
+        <locationY>1301</locationY>
+        <faultConnector>
+            <targetReference>Error_Updating_Lead</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Lead.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Working Lead</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Lead</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Lead_from_Drift_Task</name>
+        <label>Update Lead from Drift Task</label>
+        <locationX>946</locationX>
+        <locationY>1041</locationY>
+        <faultConnector>
+            <targetReference>Error_Updating_Lead</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Lead.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Marketing Qualified</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Lead</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Requestor_Email</name>
+        <label>Update Requestor Email</label>
+        <locationX>188</locationX>
+        <locationY>1403</locationY>
+        <connector>
+            <targetReference>Is_the_Task_Complete</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Error_Updating_Requestor_Email</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>Requestor_Email__c</field>
+            <value>
+                <elementReference>$Record.Requestor__r.Email</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_the_Task_owner_on_ProApp_Task</name>
+        <label>Update the Task owner on ProApp Task</label>
+        <locationX>1378</locationX>
+        <locationY>521</locationY>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>varTaskOwnerId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>754</locationY>
+        <connector>
+            <targetReference>User_Bypass_Flows</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>00T</stringValue>
+            </value>
+        </filters>
+        <object>Task</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>ErrorNode</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>varTaskOwnerId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

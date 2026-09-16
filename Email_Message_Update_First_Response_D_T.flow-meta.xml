@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <customErrors>
+        <name>Functional_Area_and_Request_Type_is_Null2</name>
+        <label>Functional Area and Request Type is Null</label>
+        <locationX>750</locationX>
+        <locationY>695</locationY>
+        <connector>
+            <targetReference>Get_Milestones</targetReference>
+        </connector>
+        <customErrorMessages>
+            <errorMessage>Functional Area and Request Type must be filled before sending first response.</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <decisions>
+        <name>Bypass_Flow</name>
+        <label>Bypass Flow?</label>
+        <locationX>761</locationX>
+        <locationY>371</locationY>
+        <defaultConnector>
+            <targetReference>From_Address_is_Case_Owner_or_Org_Wide_Email</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Run Flow</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Bypass</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Permission.Exclude_from_Flows</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Yes Bypass</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>From_Address_is_Case_Owner_or_Org_Wide_Email</name>
+        <label>From Address is Case Owner or Org Wide Email</label>
+        <locationX>1036</locationX>
+        <locationY>479</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>1 OR 2</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.FromAddress</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record.Parent.Owner:User.Email</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.FromAddress</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>OrgWideEmailAddress</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Functional_Area_and_Request_Type_is_Null</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Functional_Area_and_Request_Type_is_Null</name>
+        <label>Functional Area and Request Type is Null?</label>
+        <locationX>882</locationX>
+        <locationY>586</locationY>
+        <defaultConnector>
+            <targetReference>Get_Milestones</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>True</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ShouldBlockCaseProgression</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Functional_Area_and_Request_Type_is_Null2</targetReference>
+            </connector>
+            <label>True</label>
+        </rules>
+    </decisions>
+    <description>added variable &apos;ShouldBlockCaseProgression&apos; to prompt error message for missing problem field..</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>Now</name>
+        <dataType>DateTime</dataType>
+        <expression>NOW()</expression>
+    </formulas>
+    <formulas>
+        <name>ShouldBlockCaseProgression</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(
+  ISCHANGED($Record.Parent.Status),
+  ISPICKVAL($Record.Parent.Type, &quot;Standard&quot;),
+  ISPICKVAL(PRIORVALUE($Record.Parent.Status), &quot;New&quot;),
+  OR(
+    ISBLANK(TEXT($Record.Parent.Functional_Area__c)),
+    ISBLANK(TEXT($Record.Parent.Request_Type__c)),
+    AND(
+      NOT(ISBLANK(TEXT($Record.Parent.Functional_Area__c))),
+      OR(
+        ISPICKVAL($Record.Parent.Functional_Area__c, &quot;User Management&quot;),
+        ISPICKVAL($Record.Parent.Functional_Area__c, &quot;Pipelines&quot;),
+        ISPICKVAL($Record.Parent.Functional_Area__c, &quot;App Copy, Transfer or Restore&quot;),
+        ISPICKVAL($Record.Parent.Functional_Area__c, &quot;Realm Questions or Changes&quot;),
+        ISPICKVAL($Record.Parent.Functional_Area__c, &quot;Account Questions or Changes&quot;),
+        ISPICKVAL($Record.Parent.Functional_Area__c, &quot;Password Reset&quot;),
+        ISPICKVAL($Record.Parent.Functional_Area__c, &quot;Forms&quot;),
+        ISPICKVAL($Record.Parent.Functional_Area__c, &quot;Reporting&quot;),
+        ISPICKVAL($Record.Parent.Functional_Area__c, &quot;Notifications/Subscriptions/Reminders&quot;),
+        ISPICKVAL($Record.Parent.Functional_Area__c, &quot;Performance&quot;),
+        ISPICKVAL($Record.Parent.Functional_Area__c, &quot;Fields&quot;),
+        ISPICKVAL($Record.Parent.Functional_Area__c, &quot;Connected Tables or Syncs&quot;),
+        ISPICKVAL($Record.Parent.Functional_Area__c, &quot;SSO/SAML&quot;),
+        ISPICKVAL($Record.Parent.Functional_Area__c, &quot;Formula Fields&quot;),
+        ISPICKVAL($Record.Parent.Functional_Area__c, &quot;Roles and Permissions&quot;),
+        ISPICKVAL($Record.Parent.Functional_Area__c, &quot;Billing Questions or Changes&quot;)
+      ),
+      ISBLANK(TEXT($Record.Parent.Problem__c))
+    )
+  )
+)</expression>
+    </formulas>
+    <interviewLabel>Email Message: Update First Response D/T {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Email Message: Update First Response D/T</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Get milestones related to the case and mark it as completed.</description>
+        <name>Get_Milestones</name>
+        <label>Get Milestones</label>
+        <locationX>882</locationX>
+        <locationY>887</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Update_Milestones</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>CaseId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.ParentId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>IsCompleted</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CaseMilestone</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <description>Update First Response D/T</description>
+        <name>Update_Case</name>
+        <label>Update Case</label>
+        <locationX>882</locationX>
+        <locationY>1103</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.ParentId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>First_Response_D_T__c</field>
+            <value>
+                <elementReference>$Record.CreatedDate</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Milestones</name>
+        <label>Update Milestones</label>
+        <locationX>882</locationX>
+        <locationY>995</locationY>
+        <connector>
+            <targetReference>Update_Case</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Milestones.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>CompletionDate</field>
+            <value>
+                <elementReference>Now</elementReference>
+            </value>
+        </inputAssignments>
+        <object>CaseMilestone</object>
+    </recordUpdates>
+    <start>
+        <locationX>635</locationX>
+        <locationY>48</locationY>
+        <connector>
+            <targetReference>Bypass_Flow</targetReference>
+        </connector>
+        <filterFormula>AND(
+NOT (ISBLANK({!$Record.ParentId})),
+ISNULL({!$Record.Parent.First_Response_D_T__c})
+)</filterFormula>
+        <object>EmailMessage</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>OrgWideEmailAddress</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>case-update@quickbase.com</stringValue>
+        </value>
+    </variables>
+</Flow>

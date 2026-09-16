@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>What_does_the_body_contain</name>
+        <label>What does the body contain?</label>
+        <locationX>742</locationX>
+        <locationY>415</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Test_path</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Body</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Eric Test</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Call_Slack_notification_subflow</targetReference>
+            </connector>
+            <label>Test path</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>Feed Item: Chatter posts for Slack notifications {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Feed Item: Chatter posts for Slack notifications</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>614</locationX>
+        <locationY>48</locationY>
+        <connector>
+            <targetReference>What_does_the_body_contain</targetReference>
+        </connector>
+        <object>FeedItem</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+    <subflows>
+        <name>Call_Slack_notification_subflow</name>
+        <label>Call Slack notification subflow</label>
+        <locationX>497</locationX>
+        <locationY>409</locationY>
+        <flowName>Subflow_Send_slack_notification</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>$Record.ParentId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varSlackNotification</name>
+            <value>
+                <stringValue>Chatter Feed Test</stringValue>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+</Flow>
